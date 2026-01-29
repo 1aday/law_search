@@ -7,6 +7,8 @@
 
 | ID | Time | T | Title | Read |
 |----|------|---|-------|------|
+| #4441 | 8:30 PM | 🟣 | Enhanced Layout with Blue Gradient Logo and Navigation System | ~540 |
+| #4440 | " | 🟣 | Added Navigation and Routing to Layout Component | ~412 |
 | #4385 | 8:17 PM | ✅ | Committed and Pushed Clean Minimalist Redesign | ~540 |
 | #4382 | " | 🔄 | Removed Mobile Padding Override for Main Content Area | ~268 |
 | #4373 | 8:15 PM | 🔄 | Removed Max-Width and Padding Constraints from Main Container | ~301 |

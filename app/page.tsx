@@ -1,18 +1,14 @@
 "use client";
 
-import React from "react";
-import Layout from "../components/Layout";
-import styles from "./page.module.css";
-import Chat from "./components/chat";
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
-const Home = () => {
-  return (
-    <Layout>
-      <div className={styles.container}>
-        <Chat />
-      </div>
-    </Layout>
-  );
-};
+export default function RootPage() {
+  const router = useRouter();
 
-export default Home;
+  useEffect(() => {
+    router.push('/home');
+  }, [router]);
+
+  return null;
+}
