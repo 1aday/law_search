@@ -1,0 +1,317 @@
+.casePage {
+  min-height: 100vh;
+  background: #fafaf9;
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+.loading,
+.error {
+  text-align: center;
+  padding: 4rem 2rem;
+  font-size: 1.125rem;
+  color: var(--color-muted);
+}
+
+.caseArticle {
+  background: white;
+  border: 1px solid #e7e5e4;
+  border-radius: 8px;
+  padding: 3rem;
+}
+
+/* Header */
+.caseHeader {
+  margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid #e7e5e4;
+}
+
+.caseName {
+  font-family: Georgia, serif;
+  font-size: 2.5rem;
+  font-weight: 400;
+  line-height: 1.2;
+  color: #1c1917;
+  margin-bottom: 1rem;
+}
+
+.caseMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1rem;
+  color: #78716c;
+  margin-bottom: 0.75rem;
+}
+
+.citation {
+  font-weight: 600;
+  color: #a16207;
+}
+
+.divider {
+  color: #d6d3d1;
+}
+
+.judges {
+  font-size: 0.9375rem;
+  color: #57534e;
+  margin-top: 0.75rem;
+}
+
+/* Summary Box */
+.summaryBox {
+  background: #fef3c7;
+  border-left: 4px solid #a16207;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border-radius: 4px;
+}
+
+.summaryBox h2 {
+  font-family: Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #92400e;
+  margin-bottom: 0.75rem;
+}
+
+.summaryBox p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #78350f;
+  margin: 0;
+}
+
+/* Topics */
+.topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.topicTag {
+  padding: 0.375rem 0.875rem;
+  background: #1c1917;
+  color: white;
+  border-radius: 4px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Sections */
+.section {
+  margin-bottom: 2.5rem;
+}
+
+.section h2 {
+  font-family: Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1c1917;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #a16207;
+}
+
+.content {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #44403c;
+}
+
+.issueList,
+.relatedList {
+  list-style: none;
+  padding: 0;
+}
+
+.issueList li,
+.relatedList li {
+  padding: 0.75rem 0;
+  padding-left: 1.5rem;
+  border-bottom: 1px solid #e7e5e4;
+  position: relative;
+}
+
+.issueList li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: #a16207;
+  font-weight: 700;
+}
+
+.relatedList li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #a16207;
+  font-weight: 700;
+}
+
+.issueList li:last-child,
+.relatedList li:last-child {
+  border-bottom: none;
+}
+
+/* CTA */
+.cta {
+  background: #1c1917;
+  color: white;
+  padding: 2.5rem;
+  border-radius: 8px;
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.cta h3 {
+  font-family: Georgia, serif;
+  font-size: 1.75rem;
+  font-weight: 400;
+  margin-bottom: 0.75rem;
+}
+
+.cta p {
+  font-size: 1.0625rem;
+  color: #d6d3d1;
+  margin-bottom: 1.5rem;
+}
+
+.ctaButton {
+  padding: 1rem 2.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  background: #a16207;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.ctaButton:hover {
+  background: #b87205;
+}
+
+/* Sidebar */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sidebarBox {
+  background: white;
+  border: 1px solid #e7e5e4;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.sidebarBox h3 {
+  font-family: Georgia, serif;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1c1917;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e7e5e4;
+}
+
+.sidebarContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sidebarItem {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: #57534e;
+}
+
+.sidebarItem strong {
+  color: #1c1917;
+  font-weight: 600;
+}
+
+.sidebarButton {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  background: white;
+  color: #1c1917;
+  border: 1px solid #e7e5e4;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.sidebarButton:hover {
+  background: #fafaf9;
+  border-color: #a16207;
+}
+
+.sidebarButton:last-child {
+  margin-bottom: 0;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .casePage {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .casePage {
+    padding: 2rem 1rem;
+  }
+
+  .caseArticle {
+    padding: 2rem 1.5rem;
+  }
+
+  .caseName {
+    font-size: 1.75rem;
+  }
+
+  .caseMeta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .divider {
+    display: none;
+  }
+
+  .summaryBox {
+    padding: 1.25rem;
+  }
+
+  .section h2 {
+    font-size: 1.25rem;
+  }
+
+  .cta {
+    padding: 2rem 1.5rem;
+  }
+
+  .cta h3 {
+    font-size: 1.5rem;
+  }
+}
