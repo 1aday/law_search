@@ -11,7 +11,6 @@ export default function FeaturesPage() {
   const coreFeatures = [
     {
       category: "AI-Powered Analysis",
-      icon: "🤖",
       features: [
         {
           name: "Instant Case Briefs",
@@ -37,7 +36,6 @@ export default function FeaturesPage() {
     },
     {
       category: "Research Efficiency",
-      icon: "⚡",
       features: [
         {
           name: "Natural Language Search",
@@ -63,7 +61,6 @@ export default function FeaturesPage() {
     },
     {
       category: "Document Production",
-      icon: "📝",
       features: [
         {
           name: "One-Click Factum Export",
@@ -89,7 +86,6 @@ export default function FeaturesPage() {
     },
     {
       category: "Advanced Research",
-      icon: "🔬",
       features: [
         {
           name: "Judicial Authorship Tracking",
@@ -115,7 +111,6 @@ export default function FeaturesPage() {
     },
     {
       category: "Collaboration & Organization",
-      icon: "👥",
       features: [
         {
           name: "Research Folders",
@@ -141,7 +136,6 @@ export default function FeaturesPage() {
     },
     {
       category: "Productivity Tools",
-      icon: "🎯",
       features: [
         {
           name: "Audio Summaries",
@@ -214,7 +208,6 @@ export default function FeaturesPage() {
         {coreFeatures.map((category, idx) => (
           <section key={idx} className={styles.categorySection}>
             <div className={styles.categoryHeader}>
-              <span className={styles.categoryIcon}>{category.icon}</span>
               <h2 className={styles.categoryTitle}>{category.category}</h2>
             </div>
             <div className={styles.featureGrid}>

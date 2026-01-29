@@ -7,6 +7,9 @@
 
 | ID | Time | T | Title | Read |
 |----|------|---|-------|------|
+| #4543 | 9:13 PM | ✅ | Removed Transition Property from Chat Input Field | ~330 |
+| #4542 | " | 🔄 | Removed Thinking Indicator Dot Pulse Animation | ~381 |
+| #4541 | " | 🔄 | Removed Hover Animations from Chat Example Queries | ~355 |
 | #4493 | 8:53 PM | 🟣 | Implemented Lawyer-Focused Homepage with Problem/Solution Framework and Full Responsiveness | ~940 |
 | #4491 | " | 🟣 | Comprehensive Mobile-First Responsive Design System | ~620 |
 | #4462 | 8:37 PM | ✅ | Updated Input Placeholder for Canadian Supreme Court Context | ~325 |

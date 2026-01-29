@@ -64,7 +64,6 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  animation: slideInLeft 0.6s ease-out;
 }
 
 .badgeDot {
@@ -72,23 +71,6 @@
   height: 8px;
   background: #a16207;
   border-radius: 50%;
-  animation: pulseDot 2s ease-in-out infinite;
-}
-
-@keyframes pulseDot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.6; transform: scale(1.3); }
-}
-
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
 }
 
 .heroTitle {
@@ -99,7 +81,6 @@
   margin-bottom: 1.5rem;
   letter-spacing: -0.02em;
   color: #1c1917;
-  animation: fadeInUp 0.8s ease-out 0.2s both;
 }
 
 .heroTitleAccent {
@@ -119,12 +100,6 @@
   width: 120px;
   height: 3px;
   background: #a16207;
-  animation: expandLine 1s ease-out 0.8s both;
-}
-
-@keyframes expandLine {
-  from { width: 0; }
-  to { width: 120px; }
 }
 
 .heroSubtitle {
@@ -134,14 +109,12 @@
   margin-bottom: 2.5rem;
   max-width: 540px;
   font-weight: 400;
-  animation: fadeInUp 0.8s ease-out 0.4s both;
 }
 
 .heroActions {
   display: flex;
   gap: 1rem;
   margin-bottom: 3rem;
-  animation: fadeInUp 0.8s ease-out 0.6s both;
 }
 
 .ctaPrimary,
@@ -151,7 +124,6 @@
   font-weight: 600;
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
@@ -164,39 +136,14 @@
   background: #1c1917;
   color: white;
   border: 2px solid #1c1917;
-  position: relative;
-  overflow: hidden;
-}
-
-.ctaPrimary::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
-}
-
-.ctaPrimary:hover::before {
-  width: 300px;
-  height: 300px;
 }
 
 .ctaPrimary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(28, 25, 23, 0.25);
+  background: #292524;
 }
 
-.ctaPrimary .arrow {
-  transition: transform 0.3s ease;
-}
-
-.ctaPrimary:hover .arrow {
-  transform: translateX(4px);
+.arrow {
+  font-size: 1.125rem;
 }
 
 .ctaSecondary {
@@ -208,7 +155,6 @@
 .ctaSecondary:hover {
   border-color: #a16207;
   background: #fafaf9;
-  transform: translateY(-2px);
 }
 
 .stats {
@@ -216,7 +162,6 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
   padding-top: 2rem;
-  animation: fadeInUp 0.8s ease-out 0.8s both;
 }
 
 .stat {
@@ -255,7 +200,6 @@
 .heroVisual {
   position: relative;
   z-index: 1;
-  animation: fadeInRight 1s ease-out 0.4s both;
 }
 
 .demoCard {
@@ -330,34 +274,7 @@
   width: 8px;
   height: 14px;
   background: #a16207;
-  animation: blink 1s step-end infinite;
   margin-left: 2px;
-}
-
-@keyframes blink {
-  50% { opacity: 0; }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInRight {
-  from {
-    opacity: 0;
-    transform: translateX(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
 }
 
 /* Problems & Solutions Section */
@@ -380,18 +297,10 @@
   background: #fafaf9;
   border: 1px solid #e7e5e4;
   border-radius: 8px;
-  transition: all 0.3s ease;
 }
 
 .problemCard:hover {
   border-color: #a16207;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  transform: translateY(-4px);
-}
-
-.problemIcon {
-  font-size: 2.5rem;
-  margin-bottom: 1.5rem;
 }
 
 .problemTitle {
@@ -473,44 +382,10 @@
   background: #fafaf9;
   border: 1px solid #e7e5e4;
   border-radius: 8px;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.featureCard::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  background: #a16207;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.4s ease;
-}
-
-.featureCard:hover::before {
-  transform: scaleX(1);
 }
 
 .featureCard:hover {
-  border-color: #d6d3d1;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
-  transform: translateY(-4px);
-  background: white;
-}
-
-.featureIcon {
-  font-size: 2.5rem;
-  margin-bottom: 1.5rem;
-  display: block;
-  transition: transform 0.3s ease;
-}
-
-.featureCard:hover .featureIcon {
-  transform: scale(1.1);
+  border-color: #a16207;
 }
 
 .featureTitle {
@@ -568,14 +443,11 @@
   background: #fafaf9;
   border: 1px solid #e7e5e4;
   border-radius: 6px;
-  transition: all 0.3s ease;
 }
 
 .useCaseItem:hover {
   border-color: #a16207;
   background: white;
-  transform: translateX(4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
 .useCaseMain {
@@ -636,14 +508,11 @@
   border: 2px solid #e7e5e4;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.3s ease;
 }
 
 .exampleCard:hover {
   border-color: #a16207;
   background: white;
-  transform: translateX(8px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
 .exampleIcon {
@@ -672,12 +541,7 @@
 .exampleArrow {
   font-size: 1.5rem;
   color: #a16207;
-  transition: transform 0.3s ease;
   flex-shrink: 0;
-}
-
-.exampleCard:hover .exampleArrow {
-  transform: translateX(6px);
 }
 
 /* CTA Section - Enhanced */
@@ -733,7 +597,6 @@
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
@@ -742,17 +605,6 @@
 
 .ctaButton:hover {
   background: #b87205;
-  transform: translateY(-3px);
-  box-shadow: 0 12px 32px rgba(161, 98, 7, 0.4);
-}
-
-.ctaButton .arrow {
-  transition: transform 0.3s ease;
-  font-size: 1.25rem;
-}
-
-.ctaButton:hover .arrow {
-  transform: translateX(6px);
 }
 
 .ctaNote {

@@ -20,26 +20,22 @@ export default function HomePage() {
     {
       title: "Hours of Manual Research",
       problem: "Lawyers spend 6-8 hours per case reading lengthy SCC decisions to find relevant holdings.",
-      solution: "Get comprehensive case analysis in under 2 seconds. Extract ratio decidendi instantly.",
-      icon: "⏱️"
+      solution: "Get comprehensive case analysis in under 2 seconds. Extract ratio decidendi instantly."
     },
     {
       title: "Expensive Database Costs",
       problem: "$300-500/month for legal research databases. Small firms struggle with costs.",
-      solution: "Access Supreme Court research at a fraction of traditional database costs.",
-      icon: "💰"
+      solution: "Access Supreme Court research at a fraction of traditional database costs."
     },
     {
       title: "Complex Charter Analysis",
       problem: "Understanding multi-part tests like Oakes requires deep precedent knowledge.",
-      solution: "AI explains Charter tests, applications, and evolving interpretations clearly.",
-      icon: "📊"
+      solution: "AI explains Charter tests, applications, and evolving interpretations clearly."
     },
     {
       title: "Finding Relevant Precedents",
       problem: "Locating cases that actually apply to your fact pattern is time-consuming guesswork.",
-      solution: "Natural language queries find precisely relevant precedents and their applications.",
-      icon: "🎯"
+      solution: "Natural language queries find precisely relevant precedents and their applications."
     }
   ];
 
@@ -47,38 +43,32 @@ export default function HomePage() {
     {
       title: "Instant Case Summaries",
       description: "Get ratio decidendi, key holdings, and precedential value without reading 100+ page decisions.",
-      benefit: "Save 5+ hours per case",
-      icon: "⚡"
+      benefit: "Save 5+ hours per case"
     },
     {
       title: "Charter Test Explanations",
       description: "Understand Oakes, section 7 analysis, and other complex Charter frameworks with clear breakdowns.",
-      benefit: "Master constitutional law",
-      icon: "⚖️"
+      benefit: "Master constitutional law"
     },
     {
       title: "Dissent Analysis",
       description: "Compare majority and dissenting opinions to understand judicial reasoning and predict appeals.",
-      benefit: "Strengthen arguments",
-      icon: "🔍"
+      benefit: "Strengthen arguments"
     },
     {
       title: "Precedent Tracking",
       description: "See how cases cite each other, overrule precedents, or distinguish fact patterns.",
-      benefit: "Build stronger authority",
-      icon: "📚"
+      benefit: "Build stronger authority"
     },
     {
       title: "Plain Language Answers",
       description: "Complex legal concepts explained clearly for client advisories and memoranda.",
-      benefit: "Communicate effectively",
-      icon: "💬"
+      benefit: "Communicate effectively"
     },
     {
       title: "Citation Formatting",
       description: "Proper SCC citation format for factums, memoranda, and legal documents.",
-      benefit: "Professional accuracy",
-      icon: "📝"
+      benefit: "Professional accuracy"
     }
   ];
 
@@ -192,7 +182,6 @@ export default function HomePage() {
         <div className={styles.problemGrid}>
           {problems.map((item, index) => (
             <div key={index} className={styles.problemCard}>
-              <div className={styles.problemIcon}>{item.icon}</div>
               <h3 className={styles.problemTitle}>{item.title}</h3>
               <div className={styles.problemText}>
                 <div className={styles.problemIssue}>
@@ -218,7 +207,6 @@ export default function HomePage() {
         <div className={styles.featureGrid}>
           {features.map((feature, index) => (
             <div key={index} className={styles.featureCard}>
-              <div className={styles.featureIcon}>{feature.icon}</div>
               <h3 className={styles.featureTitle}>{feature.title}</h3>
               <p className={styles.featureDescription}>{feature.description}</p>
               <div className={styles.featureBenefit}>{feature.benefit}</div>
