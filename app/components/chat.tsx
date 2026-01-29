@@ -19,8 +19,23 @@ const UserMessage = ({ text }: { text: string }) => {
 };
 
 const AssistantMessage = ({ text }: { text: string }) => {
+  const [copied, setCopied] = React.useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
     <div className={styles.assistantMessage}>
+      <button
+        className={styles.copyButton}
+        onClick={handleCopy}
+        title="Copy response"
+      >
+        {copied ? 'Copied!' : 'Copy'}
+      </button>
       <Markdown
         remarkPlugins={[remarkGfm]}
         components={{
@@ -130,8 +145,11 @@ const Chat = ({
   const [inputDisabled, setInputDisabled] = useState(false);
   const [isThinking, setIsThinking] = useState(false);
   const [threadId, setThreadId] = useState("");
+  const [searchHistory, setSearchHistory] = useState<string[]>([]);
+  const [showHistory, setShowHistory] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -140,6 +158,34 @@ const Chat = ({
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  useEffect(() => {
+    // Load search history from localStorage
+    const savedHistory = localStorage.getItem('searchHistory');
+    if (savedHistory) {
+      try {
+        setSearchHistory(JSON.parse(savedHistory));
+      } catch (e) {
+        console.error('Failed to load search history:', e);
+      }
+    }
+
+    // Keyboard shortcuts
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Cmd+K or Ctrl+K to focus search
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+      // Escape to hide history
+      if (e.key === 'Escape') {
+        setShowHistory(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   useEffect(() => {
     const createThread = async () => {
@@ -208,16 +254,55 @@ const Chat = ({
     e.preventDefault();
     if (!userInput.trim()) return;
 
+    const query = userInput.trim();
+
+    // Add to search history
+    setSearchHistory(prev => {
+      const newHistory = [query, ...prev.filter(q => q !== query)].slice(0, 10);
+      localStorage.setItem('searchHistory', JSON.stringify(newHistory));
+      return newHistory;
+    });
+
     setMessages((prevMessages) => [
       ...prevMessages,
-      { role: "user", text: userInput },
+      { role: "user", text: query },
     ]);
     setUserInput("");
     setInputDisabled(true);
     setIsThinking(true);
+    setShowHistory(false);
 
-    await sendMessage(userInput);
+    await sendMessage(query);
     scrollToBottom();
+  };
+
+  const handleClearConversation = () => {
+    if (confirm('Clear entire conversation? This cannot be undone.')) {
+      setMessages([]);
+      // Create new thread
+      fetch('/api/assistants/threads', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" }
+      })
+      .then(res => res.json())
+      .then(data => setThreadId(data.threadId))
+      .catch(console.error);
+    }
+  };
+
+  const handleExportConversation = () => {
+    const exportText = messages.map(msg => {
+      const role = msg.role === 'user' ? 'Q' : 'A';
+      return `${role}: ${msg.text}\n\n`;
+    }).join('---\n\n');
+
+    const blob = new Blob([exportText], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `scc-research-${new Date().toISOString().split('T')[0]}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   const handleExampleClick = (query: string) => {
@@ -331,6 +416,27 @@ const Chat = ({
 
   return (
     <div className={styles.chatContainer}>
+      {messages.length > 0 && (
+        <div className={styles.toolbar}>
+          <button
+            className={styles.toolbarButton}
+            onClick={handleClearConversation}
+            title="Clear conversation"
+          >
+            Clear
+          </button>
+          <button
+            className={styles.toolbarButton}
+            onClick={handleExportConversation}
+            title="Export conversation to text file"
+          >
+            Export
+          </button>
+          <div className={styles.toolbarInfo}>
+            {messages.filter(m => m.role === 'user').length} queries
+          </div>
+        </div>
+      )}
       <div className={styles.messages}>
         {messages.length === 0 && <EmptyState onExampleClick={handleExampleClick} />}
         {messages.map((msg, index) => (
@@ -349,14 +455,36 @@ const Chat = ({
         <div ref={messagesEndRef} />
       </div>
       <form onSubmit={handleSubmit} className={styles.inputForm}>
-        <input
-          type="text"
-          className={styles.input}
-          value={userInput}
-          onChange={(e) => setUserInput(e.target.value)}
-          placeholder="Ask about any Supreme Court of Canada decision..."
-          disabled={inputDisabled}
-        />
+        <div className={styles.inputWrapper}>
+          <input
+            ref={inputRef}
+            type="text"
+            className={styles.input}
+            value={userInput}
+            onChange={(e) => setUserInput(e.target.value)}
+            onFocus={() => searchHistory.length > 0 && setShowHistory(true)}
+            placeholder="Ask about any Supreme Court of Canada decision..."
+            disabled={inputDisabled}
+          />
+          {showHistory && searchHistory.length > 0 && (
+            <div className={styles.historyDropdown}>
+              <div className={styles.historyHeader}>Recent searches</div>
+              {searchHistory.map((query, index) => (
+                <div
+                  key={index}
+                  className={styles.historyItem}
+                  onClick={() => {
+                    setUserInput(query);
+                    setShowHistory(false);
+                    inputRef.current?.focus();
+                  }}
+                >
+                  {query}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
         <button
           type="submit"
           className={styles.button}
