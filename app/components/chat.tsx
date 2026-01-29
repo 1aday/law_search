@@ -8,7 +8,6 @@ import Markdown from "react-markdown";
 import { AssistantStreamEvent } from "openai/resources/beta/assistants/assistants";
 import { RequiredActionFunctionToolCall } from "openai/resources/beta/threads/runs/runs";
 import remarkGfm from 'remark-gfm';
-import rehypeRaw from 'rehype-raw';
 
 type MessageProps = {
   role: "user" | "assistant" | "code";
@@ -27,17 +26,14 @@ const AssistantMessage = ({ text }: { text: string }) => {
         components={{
           td: ({ children }) => {
             const content = children?.toString() || '';
-
-            // Check if content contains <span> tags
             if (content.includes('<span>')) {
-              // Extract text between span tags and clean up
               const areas = content.match(/<span>(.*?)<\/span>/g)
                 ?.map(span =>
-                  span.replace(/<\/?span>/g, '')  // Remove span tags
-                    .replace(/^[,\s]+|[,\s]+$/g, '') // Remove leading/trailing commas and whitespace
+                  span.replace(/<\/?span>/g, '')
+                    .replace(/^[,\s]+|[,\s]+$/g, '')
                     .trim()
                 )
-                .filter(area => area.length > 0); // Remove empty strings
+                .filter(area => area.length > 0);
 
               return (
                 <td>
@@ -51,7 +47,6 @@ const AssistantMessage = ({ text }: { text: string }) => {
                 </td>
               );
             }
-
             return <td>{children}</td>;
           }
         }}
@@ -88,26 +83,32 @@ const Message = ({ role, text }: MessageProps) => {
   }
 };
 
-const EmptyState = () => {
+const EmptyState = ({ onExampleClick }: { onExampleClick: (query: string) => void }) => {
+  const examples = [
+    "What was the key holding in Brown v. Board of Education?",
+    "Explain the dissenting opinion in Roe v. Wade",
+    "What precedents did Citizens United overturn?"
+  ];
+
   return (
     <div className={styles.emptyState}>
       <div className={styles.emptyStateContent}>
         <h2 className={styles.emptyStateTitle}>
-          Interrogate the Law
+          Supreme Court Research
         </h2>
         <p className={styles.emptyStateSubtitle}>
-          Ask anything about Supreme Court cases. Uncover holdings, dissents, and precedents with precision.
+          Ask questions about any Supreme Court case to get instant insights on holdings, dissents, and precedents.
         </p>
         <div className={styles.exampleQueries}>
-          <div className={styles.exampleQuery}>
-            What was the key holding in Brown v. Board of Education?
-          </div>
-          <div className={styles.exampleQuery}>
-            Explain the dissenting opinion in Roe v. Wade
-          </div>
-          <div className={styles.exampleQuery}>
-            What precedents did Citizens United overturn?
-          </div>
+          {examples.map((query, index) => (
+            <div
+              key={index}
+              className={styles.exampleQuery}
+              onClick={() => onExampleClick(query)}
+            >
+              {query}
+            </div>
+          ))}
         </div>
       </div>
     </div>
@@ -121,7 +122,7 @@ type ChatProps = {
 };
 
 const Chat = ({
-  functionCallHandler = () => Promise.resolve(""), // default to return empty string
+  functionCallHandler = () => Promise.resolve(""),
 }: ChatProps) => {
   const [userInput, setUserInput] = useState("");
   const [messages, setMessages] = useState([]);
@@ -129,16 +130,16 @@ const Chat = ({
   const [isThinking, setIsThinking] = useState(false);
   const [threadId, setThreadId] = useState("");
 
-  // automatically scroll to bottom of chat
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
-  // create a new threadID when chat component created
   useEffect(() => {
     const createThread = async () => {
       try {
@@ -154,7 +155,6 @@ const Chat = ({
         }
 
         const data = await res.json();
-        console.log('Thread created:', data.threadId);
         setThreadId(data.threadId);
       } catch (error) {
         console.error('Failed to create thread:', error);
@@ -219,49 +219,55 @@ const Chat = ({
     scrollToBottom();
   };
 
-  /* Stream Event Handlers */
+  const handleExampleClick = (query: string) => {
+    setUserInput(query);
+    // Automatically submit
+    setTimeout(() => {
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { role: "user", text: query },
+      ]);
+      setUserInput("");
+      setInputDisabled(true);
+      setIsThinking(true);
+      sendMessage(query);
+    }, 100);
+  };
 
-  // textCreated - create new assistant message
   const handleTextCreated = () => {
     setIsThinking(false);
     appendMessage("assistant", "");
   };
 
-  // textDelta - append text to last assistant message
   const handleTextDelta = (delta) => {
     if (delta.value != null) {
       appendToLastMessage(delta.value);
-    };
+    }
     if (delta.annotations != null) {
       annotateLastMessage(delta.annotations);
     }
   };
 
-  // imageFileDone - show image in chat
   const handleImageFileDone = (image) => {
     appendToLastMessage(`\n![${image.file_id}](/api/files/${image.file_id})\n`);
-  }
+  };
 
-  // toolCallCreated - log new tool call
   const toolCallCreated = (toolCall) => {
     if (toolCall.type != "code_interpreter") return;
     appendMessage("code", "");
   };
 
-  // toolCallDelta - log delta and snapshot for the tool call
   const toolCallDelta = (delta, snapshot) => {
     if (delta.type != "code_interpreter") return;
     if (!delta.code_interpreter.input) return;
     appendToLastMessage(delta.code_interpreter.input);
   };
 
-  // handleRequiresAction - handle function call
   const handleRequiresAction = async (
     event: AssistantStreamEvent.ThreadRunRequiresAction
   ) => {
     const runId = event.data.id;
     const toolCalls = event.data.required_action.submit_tool_outputs.tool_calls;
-    // loop over tool calls and call function handler
     const toolCallOutputs = await Promise.all(
       toolCalls.map(async (toolCall) => {
         const result = await functionCallHandler(toolCall);
@@ -272,36 +278,22 @@ const Chat = ({
     submitActionResult(runId, toolCallOutputs);
   };
 
-  // handleRunCompleted - re-enable the input form
   const handleRunCompleted = () => {
     setInputDisabled(false);
   };
 
   const handleReadableStream = (stream: AssistantStream) => {
-    // messages
     stream.on("textCreated", handleTextCreated);
     stream.on("textDelta", handleTextDelta);
-
-    // image
     stream.on("imageFileDone", handleImageFileDone);
-
-    // code interpreter
     stream.on("toolCallCreated", toolCallCreated);
     stream.on("toolCallDelta", toolCallDelta);
-
-    // events without helpers yet (e.g. requires_action and run.done)
     stream.on("event", (event) => {
       if (event.event === "thread.run.requires_action")
         handleRequiresAction(event);
       if (event.event === "thread.run.completed") handleRunCompleted();
     });
   };
-
-  /*
-    =======================
-    === Utility Helpers ===
-    =======================
-  */
 
   const appendToLastMessage = (text) => {
     setMessages((prevMessages) => {
@@ -331,23 +323,22 @@ const Chat = ({
             `/api/files/${annotation.file_path.file_id}`
           );
         }
-      })
+      });
       return [...prevMessages.slice(0, -1), updatedLastMessage];
     });
-
-  }
+  };
 
   return (
     <div className={styles.chatContainer}>
       <div className={styles.messages}>
-        {messages.length === 0 && <EmptyState />}
+        {messages.length === 0 && <EmptyState onExampleClick={handleExampleClick} />}
         {messages.map((msg, index) => (
           <Message key={index} role={msg.role} text={msg.text} />
         ))}
         {isThinking && (
           <div className={styles.thinkingContainer}>
             <div className={styles.thinkingBubble}>
-              <span className={styles.thinkingText}>Analyzing precedent</span>
+              <span className={styles.thinkingText}>Thinking</span>
               <span className={styles.dot}>.</span>
               <span className={styles.dot}>.</span>
               <span className={styles.dot}>.</span>
@@ -356,23 +347,21 @@ const Chat = ({
         )}
         <div ref={messagesEndRef} />
       </div>
-      <form
-        onSubmit={handleSubmit}
-        className={styles.inputForm}
-      >
+      <form onSubmit={handleSubmit} className={styles.inputForm}>
         <input
           type="text"
           className={styles.input}
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
           placeholder="Ask about any Supreme Court case..."
+          disabled={inputDisabled}
         />
         <button
           type="submit"
           className={styles.button}
-          disabled={inputDisabled}
+          disabled={inputDisabled || !userInput.trim()}
         >
-          Query
+          Send
         </button>
       </form>
     </div>

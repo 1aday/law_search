@@ -10,19 +10,18 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div className={styles.layout}>
             <header className={styles.header}>
                 <div className={styles.headerContent}>
-                    <h1>
-                        <span>Case</span>
-                        <strong>Query</strong>
-                    </h1>
+                    <div className={styles.logo}>
+                        CaseQuery
+                    </div>
                     <div className={styles.tagline}>
-                        Interrogate · Uncover · Navigate
+                        Supreme Court Research
                     </div>
                 </div>
             </header>
             <main className={styles.main}>{children}</main>
             <footer className={styles.footer}>
                 <div className={styles.footerContent}>
-                    <p>© 2024 CaseQuery</p>
+                    © 2024 CaseQuery
                 </div>
             </footer>
         </div>
