@@ -1,0 +1,316 @@
+.featuresPage {
+  min-height: 100vh;
+  background: #fafaf9;
+}
+
+/* Hero */
+.hero {
+  padding: 6rem 3rem 4rem;
+  background: white;
+  border-bottom: 1px solid #e7e5e4;
+  text-align: center;
+}
+
+.heroContent {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.heroTitle {
+  font-family: Georgia, serif;
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  color: #1c1917;
+  letter-spacing: -0.02em;
+}
+
+.heroTitle span {
+  color: #a16207;
+  font-style: italic;
+}
+
+.heroSubtitle {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: #57534e;
+  margin-bottom: 2.5rem;
+}
+
+/* Category Sections */
+.categorySection {
+  padding: 4rem 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.categorySection:nth-child(even) {
+  background: white;
+}
+
+.categoryHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e7e5e4;
+}
+
+.categoryIcon {
+  font-size: 2.5rem;
+}
+
+.categoryTitle {
+  font-family: Georgia, serif;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #1c1917;
+}
+
+/* Feature Grid */
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.featureCard {
+  padding: 2rem;
+  background: white;
+  border: 1px solid #e7e5e4;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.categorySection:nth-child(even) .featureCard {
+  background: #fafaf9;
+}
+
+.featureCard:hover {
+  border-color: #a16207;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px);
+}
+
+.featureName {
+  font-family: Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1c1917;
+  margin-bottom: 1rem;
+}
+
+.featureDescription {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: #57534e;
+  margin-bottom: 1.25rem;
+}
+
+.featureBenefit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #16a34a;
+  color: white;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.benefitIcon {
+  font-weight: 700;
+}
+
+/* Coming Soon */
+.comingSoon {
+  padding: 6rem 3rem;
+  background: #1c1917;
+  color: white;
+}
+
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 4rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sectionTitle {
+  font-family: Georgia, serif;
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 400;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.sectionSubtitle {
+  font-size: 1.0625rem;
+  color: #d6d3d1;
+  line-height: 1.7;
+}
+
+.comingSoonGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.comingSoonCard {
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.comingSoonCard:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #a16207;
+  transform: translateY(-4px);
+}
+
+.comingSoonHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.comingSoonName {
+  font-family: Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: white;
+  flex: 1;
+}
+
+.comingSoonEta {
+  padding: 0.375rem 0.875rem;
+  background: #a16207;
+  color: white;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.comingSoonDescription {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: #d6d3d1;
+}
+
+/* CTA */
+.cta {
+  padding: 6rem 3rem;
+  background: white;
+  text-align: center;
+}
+
+.ctaContent {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.ctaTitle {
+  font-family: Georgia, serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 400;
+  margin-bottom: 1rem;
+  color: #1c1917;
+  letter-spacing: -0.02em;
+}
+
+.ctaSubtitle {
+  font-size: 1.125rem;
+  color: #57534e;
+  margin-bottom: 2.5rem;
+  line-height: 1.7;
+}
+
+.ctaButton {
+  padding: 1.25rem 3rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  background: #1c1917;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  letter-spacing: 0.01em;
+}
+
+.ctaButton:hover {
+  background: #292524;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(28, 25, 23, 0.25);
+}
+
+.arrow {
+  transition: transform 0.3s ease;
+  font-size: 1.25rem;
+}
+
+.ctaButton:hover .arrow {
+  transform: translateX(4px);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .featureGrid,
+  .comingSoonGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero,
+  .categorySection,
+  .comingSoon,
+  .cta {
+    padding: 4rem 1.5rem;
+  }
+
+  .heroTitle,
+  .categoryTitle,
+  .sectionTitle,
+  .ctaTitle {
+    font-size: 2rem;
+  }
+
+  .categoryHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .featureCard,
+  .comingSoonCard {
+    padding: 1.5rem;
+  }
+
+  .comingSoonHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .comingSoonEta {
+    align-self: flex-start;
+  }
+}

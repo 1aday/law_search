@@ -21,6 +21,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     </div>
                     <nav className={styles.nav}>
                         <button
+                            className={pathname === '/features' ? styles.navItemActive : styles.navItem}
+                            onClick={() => router.push('/features')}
+                        >
+                            Features
+                        </button>
+                        <button
                             className={pathname === '/chat' ? styles.navItemActive : styles.navItem}
                             onClick={() => router.push('/chat')}
                         >
