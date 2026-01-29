@@ -34,7 +34,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <div className={styles.footerContent}>
                     <span>© 2024 CaseQuery</span>
                     <span className={styles.footerDivider}>·</span>
-                    <span>AI-Powered Legal Research</span>
+                    <span>Supreme Court of Canada Research</span>
                 </div>
             </footer>
         </div>

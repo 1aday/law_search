@@ -85,19 +85,20 @@ const Message = ({ role, text }: MessageProps) => {
 
 const EmptyState = ({ onExampleClick }: { onExampleClick: (query: string) => void }) => {
   const examples = [
-    "What was the key holding in Brown v. Board of Education?",
-    "Explain the dissenting opinion in Roe v. Wade",
-    "What precedents did Citizens United overturn?"
+    "What is the Oakes test and how is it applied in Charter analysis?",
+    "Explain the ratio decidendi in R. v. Morgentaler regarding section 7 rights",
+    "What did the SCC hold in Reference re Secession of Quebec?",
+    "How did Roncarelli v. Duplessis establish the rule of law in Canada?"
   ];
 
   return (
     <div className={styles.emptyState}>
       <div className={styles.emptyStateContent}>
         <h2 className={styles.emptyStateTitle}>
-          Supreme Court Research
+          Supreme Court of Canada Research
         </h2>
         <p className={styles.emptyStateSubtitle}>
-          Ask questions about any Supreme Court case to get instant insights on holdings, dissents, and precedents.
+          Ask questions about any SCC decision to get instant analysis of holdings, dissents, Charter applications, and precedential value.
         </p>
         <div className={styles.exampleQueries}>
           {examples.map((query, index) => (
@@ -353,7 +354,7 @@ const Chat = ({
           className={styles.input}
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
-          placeholder="Ask about any Supreme Court case..."
+          placeholder="Ask about any Supreme Court of Canada decision..."
           disabled={inputDisabled}
         />
         <button

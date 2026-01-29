@@ -13,29 +13,29 @@ export default function HomePage() {
 
   const features = [
     {
-      title: "Instant Legal Research",
-      description: "Query Supreme Court cases and get comprehensive answers in seconds.",
-      icon: "⚡"
-    },
-    {
-      title: "AI-Powered Analysis",
-      description: "Advanced language models trained on legal precedent and case law.",
-      icon: "🤖"
-    },
-    {
-      title: "Complete Holdings",
-      description: "Extract key holdings, dissents, and precedents with precision.",
+      title: "Supreme Court Research",
+      description: "Query Supreme Court of Canada decisions with AI-powered precision and comprehensive analysis.",
       icon: "⚖️"
+    },
+    {
+      title: "Canadian Legal Intelligence",
+      description: "Purpose-built for Canadian law with deep understanding of SCC precedent and Charter jurisprudence.",
+      icon: "🍁"
+    },
+    {
+      title: "Complete Case Analysis",
+      description: "Extract ratio decidendi, dissents, and precedential value with authoritative accuracy.",
+      icon: "📚"
     }
   ];
 
   const useCases = [
-    "Legal Research & Discovery",
-    "Case Brief Preparation",
-    "Precedent Analysis",
-    "Academic Study",
-    "Litigation Strategy",
-    "Client Consultation"
+    "Constitutional Law Research",
+    "Charter Rights Analysis",
+    "Factum Preparation",
+    "Legal Memoranda",
+    "Academic Research",
+    "Client Advisory"
   ];
 
   return (
@@ -45,15 +45,15 @@ export default function HomePage() {
         <div className={styles.heroContent}>
           <div className={styles.badge}>
             <span className={styles.badgeDot}></span>
-            AI-Powered Legal Research
+            Supreme Court of Canada Research
           </div>
           <h1 className={styles.heroTitle}>
-            Interrogate the Law
-            <span className={styles.heroTitleAccent}>with Intelligence</span>
+            Canadian Legal Research
+            <span className={styles.heroTitleAccent}>Powered by Intelligence</span>
           </h1>
           <p className={styles.heroSubtitle}>
-            CaseQuery combines decades of Supreme Court precedent with cutting-edge AI
-            to deliver instant, comprehensive legal research. Built for lawyers who demand precision.
+            CaseQuery delivers instant, comprehensive analysis of Supreme Court of Canada decisions.
+            Built for Canadian legal professionals who demand precision in constitutional and appellate research.
           </p>
           <div className={styles.heroActions}>
             <button onClick={handleGetStarted} className={styles.ctaPrimary}>
@@ -61,39 +61,21 @@ export default function HomePage() {
               <span className={styles.arrow}>→</span>
             </button>
             <button className={styles.ctaSecondary}>
-              See Example Queries
+              View Example Queries
             </button>
           </div>
           <div className={styles.stats}>
             <div className={styles.stat}>
-              <div className={styles.statNumber}>10,000+</div>
-              <div className={styles.statLabel}>Cases Indexed</div>
+              <div className={styles.statNumber}>5,000+</div>
+              <div className={styles.statLabel}>SCC Decisions</div>
             </div>
             <div className={styles.stat}>
-              <div className={styles.statNumber}>&lt;2s</div>
-              <div className={styles.statLabel}>Avg Response Time</div>
+              <div className={styles.statNumber}>1982–</div>
+              <div className={styles.statLabel}>Charter Era Coverage</div>
             </div>
             <div className={styles.stat}>
               <div className={styles.statNumber}>100%</div>
               <div className={styles.statLabel}>Citation Accuracy</div>
-            </div>
-          </div>
-        </div>
-        <div className={styles.heroVisual}>
-          <div className={styles.codeWindow}>
-            <div className={styles.codeHeader}>
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-            <div className={styles.codeContent}>
-              <div className={styles.codeLine}>
-                <span className={styles.prompt}>$</span>
-                <span className={styles.input}>query "Brown v. Board holdings"</span>
-              </div>
-              <div className={styles.codeLine}>
-                <span className={styles.cursor}>▋</span>
-              </div>
             </div>
           </div>
         </div>
@@ -102,9 +84,9 @@ export default function HomePage() {
       {/* Features Section */}
       <section className={styles.features}>
         <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>Precision Meets Intelligence</h2>
+          <h2 className={styles.sectionTitle}>Canadian Legal Excellence</h2>
           <p className={styles.sectionSubtitle}>
-            The research tool built for the modern legal practice
+            Purpose-built for the unique demands of Canadian appellate and constitutional research
           </p>
         </div>
         <div className={styles.featureGrid}>
@@ -121,7 +103,7 @@ export default function HomePage() {
       {/* Use Cases Section */}
       <section className={styles.useCases}>
         <div className={styles.useCasesContent}>
-          <h2 className={styles.sectionTitle}>Built for Every Legal Workflow</h2>
+          <h2 className={styles.sectionTitle}>For Every Canadian Legal Practice</h2>
           <div className={styles.useCaseGrid}>
             {useCases.map((useCase, index) => (
               <div key={index} className={styles.useCaseItem}>
@@ -136,12 +118,12 @@ export default function HomePage() {
       {/* CTA Section */}
       <section className={styles.cta}>
         <div className={styles.ctaContent}>
-          <h2 className={styles.ctaTitle}>Ready to Transform Your Research?</h2>
+          <h2 className={styles.ctaTitle}>Transform Your SCC Research</h2>
           <p className={styles.ctaSubtitle}>
-            Join legal professionals using AI to work smarter, not harder.
+            Join Canadian legal professionals using AI to research Supreme Court decisions with unprecedented speed and accuracy.
           </p>
           <button onClick={handleGetStarted} className={styles.ctaButton}>
-            Start Free Research
+            Begin Research
             <span className={styles.arrow}>→</span>
           </button>
         </div>
