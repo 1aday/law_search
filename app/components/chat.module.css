@@ -501,28 +501,48 @@
   cursor: not-allowed;
 }
 
-/* Responsive Design */
+/* Tablet Responsive */
+@media (max-width: 1024px) {
+  .messages {
+    padding: var(--space-md);
+  }
+
+  .userMessage,
+  .assistantMessage,
+  .codeMessage {
+    max-width: 85%;
+  }
+}
+
+/* Mobile Responsive */
 @media (max-width: 768px) {
   .chatContainer {
     height: calc(100vh - 140px);
+    border-radius: 0;
   }
 
   .messages {
-    padding: var(--space-md);
+    padding: var(--space-sm);
     gap: var(--space-md);
   }
 
   .emptyState {
-    min-height: 350px;
-    padding: var(--space-md);
+    min-height: 300px;
+    padding: var(--space-md) var(--space-sm);
   }
 
   .emptyStateTitle {
-    font-size: 2rem;
+    font-size: 1.75rem;
+    line-height: 1.2;
   }
 
   .emptyStateSubtitle {
-    font-size: 1.0625rem;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .exampleQueries {
+    gap: var(--space-sm);
   }
 
   .userMessage,
@@ -531,26 +551,109 @@
     max-width: 100%;
     padding: 1rem 1.25rem;
     font-size: 0.9375rem;
+    word-break: break-word;
   }
 
+  /* Better typography for mobile */
+  .assistantMessage h1 {
+    font-size: 1.25rem;
+  }
+
+  .assistantMessage h2 {
+    font-size: 1.125rem;
+  }
+
+  .assistantMessage h3 {
+    font-size: 1rem;
+  }
+
+  .assistantMessage p {
+    margin: var(--space-sm) 0;
+  }
+
+  .assistantMessage ul,
+  .assistantMessage ol {
+    margin: var(--space-sm) 0;
+    padding-left: 1.5rem;
+  }
+
+  /* Mobile-friendly input */
   .inputForm {
-    padding: var(--space-md);
+    padding: var(--space-sm);
     gap: var(--space-xs);
+    flex-wrap: wrap;
   }
 
   .input {
     padding: 0.875rem 1rem;
     font-size: 1rem;
+    min-height: 48px;
+    border-radius: 8px;
   }
 
   .button {
     padding: 0.875rem 1.5rem;
     font-size: 1rem;
+    min-height: 48px;
+    border-radius: 8px;
   }
 
   .exampleQuery {
-    padding: 1rem 1.25rem;
+    padding: 1rem;
     font-size: 0.9375rem;
+    line-height: 1.5;
+    border-radius: 8px;
+  }
+
+  /* Better code block mobile */
+  .codeMessage {
+    font-size: 0.8125rem;
+    padding: 1rem;
+    overflow-x: auto;
+  }
+
+  /* Mobile table improvements in messages */
+  .assistantMessage table {
+    font-size: 0.8125rem;
+    margin: var(--space-md) -1.25rem;
+    width: calc(100% + 2.5rem);
+    border-radius: 0;
+  }
+
+  /* Legal tags mobile */
+  .legalTags {
+    gap: 0.375rem;
+  }
+
+  .legalTag {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.625rem;
+  }
+
+  /* Thinking indicator mobile */
+  .thinkingBubble {
+    font-size: 0.875rem;
+    padding: 0.625rem 0.875rem;
+  }
+}
+
+/* Small mobile (iPhone SE, etc) */
+@media (max-width: 375px) {
+  .emptyStateTitle {
+    font-size: 1.5rem;
+  }
+
+  .inputForm {
+    flex-direction: column;
+  }
+
+  .input,
+  .button {
+    width: 100%;
+  }
+
+  .button {
+    justify-content: center;
   }
 }
 

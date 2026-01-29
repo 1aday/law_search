@@ -201,7 +201,7 @@ hr {
   border-top: 1px solid var(--color-border);
 }
 
-/* Tables - Clean & Minimal */
+/* Tables - Responsive & Mobile-First */
 table {
   width: 100%;
   margin: var(--space-lg) 0;
@@ -247,18 +247,83 @@ td:first-child {
   font-weight: 500;
 }
 
-/* Responsive tables */
+/* Mobile-Optimized Tables */
 @media (max-width: 768px) {
-  table {
+  /* Stack table rows vertically on mobile */
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
     display: block;
-    overflow-x: auto;
-    font-size: 0.875rem;
   }
 
-  th,
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  tr {
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background: white;
+  }
+
   td {
+    border: none;
+    border-bottom: 1px solid var(--color-border);
+    position: relative;
+    padding: 1rem 1rem 1rem 45%;
+    text-align: left;
+  }
+
+  td:last-child {
+    border-bottom: none;
+  }
+
+  td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 1rem;
+    width: 40%;
+    padding-right: 1rem;
+    white-space: nowrap;
+    font-weight: 600;
+    color: var(--color-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Horizontal scroll fallback if data-label not available */
+  table:not([data-mobile="stacked"]) {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table:not([data-mobile="stacked"]) thead,
+  table:not([data-mobile="stacked"]) tbody,
+  table:not([data-mobile="stacked"]) tr,
+  table:not([data-mobile="stacked"]) th,
+  table:not([data-mobile="stacked"]) td {
+    display: table-cell;
+  }
+
+  table:not([data-mobile="stacked"]) thead tr {
+    position: static;
+  }
+
+  table:not([data-mobile="stacked"]) td {
     padding: 0.875rem 1rem;
     white-space: nowrap;
+  }
+
+  table:not([data-mobile="stacked"]) td::before {
+    display: none;
   }
 }
 
