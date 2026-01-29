@@ -79,6 +79,26 @@ export default function HomePage() {
             </div>
           </div>
         </div>
+        <div className={styles.heroVisual}>
+          <div className={styles.demoCard}>
+            <div className={styles.demoTitle}>Live Example</div>
+            <div className={styles.demoQuery}>
+              What is the Oakes test in Charter analysis?
+            </div>
+            <div className={styles.demoResponse}>
+              The <strong>Oakes test</strong> stems from <em>R. v. Oakes</em>, [1986] 1 SCR 103, establishing the framework for section 1 Charter analysis.
+
+              <br/><br/>
+
+              To justify a limit on Charter rights, the government must prove:
+              <br/>
+              1. The objective is pressing and substantial
+              <br/>
+              2. The means are proportional (rational connection, minimal impairment, proportionate effects)
+              <span className={styles.typing}></span>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Features Section */}
