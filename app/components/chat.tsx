@@ -12,14 +12,25 @@ import remarkGfm from 'remark-gfm';
 type MessageProps = {
   role: "user" | "assistant" | "code";
   text: string;
+  id?: number;
+  bookmarked?: boolean;
+  onBookmark?: (id: number) => void;
+  onExtractCitations?: (text: string) => void;
 };
 
 const UserMessage = ({ text }: { text: string }) => {
   return <div className={styles.userMessage}>{text}</div>;
 };
 
-const AssistantMessage = ({ text }: { text: string }) => {
+const AssistantMessage = ({ text, id, bookmarked, onBookmark, onExtractCitations }: {
+  text: string;
+  id?: number;
+  bookmarked?: boolean;
+  onBookmark?: (id: number) => void;
+  onExtractCitations?: (text: string) => void;
+}) => {
   const [copied, setCopied] = React.useState(false);
+  const [citationsCopied, setCitationsCopied] = React.useState(false);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(text);
@@ -27,15 +38,50 @@ const AssistantMessage = ({ text }: { text: string }) => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleExtractCitations = () => {
+    // Extract case citations from text (simple pattern matching)
+    const citationPattern = /\[?\d{4}\]\s*\d*\s*S\.?C\.?R\.?\s*\d+|R\.\s*v\.\s*[A-Z][a-zA-Z]+|Reference\s+re\s+[A-Z][a-zA-Z\s]+/g;
+    const citations = text.match(citationPattern) || [];
+    const uniqueCitations = [...new Set(citations)];
+    const citationText = uniqueCitations.join('\n');
+
+    if (citationText) {
+      navigator.clipboard.writeText(citationText);
+      setCitationsCopied(true);
+      setTimeout(() => setCitationsCopied(false), 2000);
+      if (onExtractCitations) {
+        onExtractCitations(citationText);
+      }
+    }
+  };
+
   return (
     <div className={styles.assistantMessage}>
-      <button
-        className={styles.copyButton}
-        onClick={handleCopy}
-        title="Copy response"
-      >
-        {copied ? 'Copied!' : 'Copy'}
-      </button>
+      <div className={styles.messageActions}>
+        <button
+          className={styles.actionButton}
+          onClick={handleCopy}
+          title="Copy full response"
+        >
+          {copied ? '✓ Copied' : 'Copy'}
+        </button>
+        <button
+          className={styles.actionButton}
+          onClick={handleExtractCitations}
+          title="Extract case citations"
+        >
+          {citationsCopied ? '✓ Citations' : 'Citations'}
+        </button>
+        {id !== undefined && onBookmark && (
+          <button
+            className={`${styles.actionButton} ${bookmarked ? styles.bookmarked : ''}`}
+            onClick={() => onBookmark(id)}
+            title={bookmarked ? 'Remove bookmark' : 'Bookmark response'}
+          >
+            {bookmarked ? '★ Saved' : '☆ Save'}
+          </button>
+        )}
+      </div>
       <Markdown
         remarkPlugins={[remarkGfm]}
         components={{
@@ -85,12 +131,20 @@ const CodeMessage = ({ text }: { text: string }) => {
   );
 };
 
-const Message = ({ role, text }: MessageProps) => {
+const Message = ({ role, text, id, bookmarked, onBookmark, onExtractCitations }: MessageProps) => {
   switch (role) {
     case "user":
       return <UserMessage text={text} />;
     case "assistant":
-      return <AssistantMessage text={text} />;
+      return (
+        <AssistantMessage
+          text={text}
+          id={id}
+          bookmarked={bookmarked}
+          onBookmark={onBookmark}
+          onExtractCitations={onExtractCitations}
+        />
+      );
     case "code":
       return <CodeMessage text={text} />;
     default:
@@ -147,20 +201,75 @@ const Chat = ({
   const [threadId, setThreadId] = useState("");
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const [showHistory, setShowHistory] = useState(false);
+  const [bookmarkedMessages, setBookmarkedMessages] = useState<Set<number>>(new Set());
+  const [showBookmarks, setShowBookmarks] = useState(false);
+  const [sessionName, setSessionName] = useState('');
+  const [savedSessions, setSavedSessions] = useState<string[]>([]);
+  const [showSessions, setShowSessions] = useState(false);
+  const [extractedCitations, setExtractedCitations] = useState<string>('');
+  const [showCitations, setShowCitations] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const messagesContainerRef = useRef<HTMLDivElement | null>(null);
+  const [isUserScrolling, setIsUserScrolling] = useState(false);
+  const [showScrollButton, setShowScrollButton] = useState(false);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  const scrollToBottom = (force = false) => {
+    if (!isUserScrolling || force) {
+      messagesEndRef.current?.scrollIntoView({ behavior: force ? "auto" : "smooth" });
+    }
+  };
+
+  const checkIfAtBottom = () => {
+    const container = messagesContainerRef.current;
+    if (!container) return true;
+
+    const threshold = 100;
+    const distanceFromBottom = container.scrollHeight - container.scrollTop - container.clientHeight;
+    return distanceFromBottom < threshold;
   };
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    // Only auto-scroll if user hasn't manually scrolled up
+    if (!isUserScrolling) {
+      scrollToBottom();
+    } else {
+      // Show scroll button if not at bottom
+      setShowScrollButton(!checkIfAtBottom());
+    }
+  }, [messages, isUserScrolling]);
 
   useEffect(() => {
-    // Load search history from localStorage
+    const container = messagesContainerRef.current;
+    if (!container) return;
+
+    let scrollTimeout: NodeJS.Timeout;
+
+    const handleScroll = () => {
+      clearTimeout(scrollTimeout);
+
+      // Check if user has scrolled away from bottom
+      setIsUserScrolling(!checkIfAtBottom());
+
+      // Reset scroll flag after 3 seconds of no scrolling
+      scrollTimeout = setTimeout(() => {
+        if (checkIfAtBottom()) {
+          setIsUserScrolling(false);
+          setShowScrollButton(false);
+        }
+      }, 3000);
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    return () => {
+      container.removeEventListener('scroll', handleScroll);
+      clearTimeout(scrollTimeout);
+    };
+  }, []);
+
+  useEffect(() => {
+    // Load data from localStorage
     const savedHistory = localStorage.getItem('searchHistory');
     if (savedHistory) {
       try {
@@ -170,6 +279,18 @@ const Chat = ({
       }
     }
 
+    const savedBookmarks = localStorage.getItem('bookmarkedMessages');
+    if (savedBookmarks) {
+      try {
+        setBookmarkedMessages(new Set(JSON.parse(savedBookmarks)));
+      } catch (e) {
+        console.error('Failed to load bookmarks:', e);
+      }
+    }
+
+    const sessions = JSON.parse(localStorage.getItem('sessions') || '[]');
+    setSavedSessions(sessions.map(s => s.name));
+
     // Keyboard shortcuts
     const handleKeyDown = (e: KeyboardEvent) => {
       // Cmd+K or Ctrl+K to focus search
@@ -177,9 +298,12 @@ const Chat = ({
         e.preventDefault();
         inputRef.current?.focus();
       }
-      // Escape to hide history
+      // Escape to hide overlays
       if (e.key === 'Escape') {
         setShowHistory(false);
+        setShowBookmarks(false);
+        setShowSessions(false);
+        setShowCitations(false);
       }
     };
 
@@ -305,6 +429,51 @@ const Chat = ({
     URL.revokeObjectURL(url);
   };
 
+  const handleBookmark = (messageId: number) => {
+    setBookmarkedMessages(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(messageId)) {
+        newSet.delete(messageId);
+      } else {
+        newSet.add(messageId);
+      }
+      localStorage.setItem('bookmarkedMessages', JSON.stringify([...newSet]));
+      return newSet;
+    });
+  };
+
+  const handleSaveSession = () => {
+    const name = sessionName.trim() || `Session ${new Date().toLocaleString()}`;
+    const session = {
+      name,
+      messages,
+      bookmarked: [...bookmarkedMessages],
+      timestamp: new Date().toISOString()
+    };
+
+    const sessions = JSON.parse(localStorage.getItem('sessions') || '[]');
+    sessions.unshift(session);
+    localStorage.setItem('sessions', JSON.stringify(sessions.slice(0, 20)));
+    setSavedSessions(sessions.slice(0, 20).map(s => s.name));
+    setSessionName('');
+    alert(`Session "${name}" saved`);
+  };
+
+  const handleLoadSession = (sessionName: string) => {
+    const sessions = JSON.parse(localStorage.getItem('sessions') || '[]');
+    const session = sessions.find(s => s.name === sessionName);
+    if (session) {
+      setMessages(session.messages);
+      setBookmarkedMessages(new Set(session.bookmarked || []));
+      setShowSessions(false);
+    }
+  };
+
+  const handleExtractCitations = (citations: string) => {
+    setExtractedCitations(prev => prev ? `${prev}\n${citations}` : citations);
+    setShowCitations(true);
+  };
+
   const handleExampleClick = (query: string) => {
     setUserInput(query);
     // Automatically submit
@@ -420,10 +589,17 @@ const Chat = ({
         <div className={styles.toolbar}>
           <button
             className={styles.toolbarButton}
-            onClick={handleClearConversation}
-            title="Clear conversation"
+            onClick={() => setShowBookmarks(!showBookmarks)}
+            title="View saved responses"
           >
-            Clear
+            ★ Saved ({bookmarkedMessages.size})
+          </button>
+          <button
+            className={styles.toolbarButton}
+            onClick={() => setShowSessions(!showSessions)}
+            title="Save/load research sessions"
+          >
+            Sessions
           </button>
           <button
             className={styles.toolbarButton}
@@ -432,15 +608,30 @@ const Chat = ({
           >
             Export
           </button>
+          <button
+            className={styles.toolbarButton}
+            onClick={handleClearConversation}
+            title="Clear conversation"
+          >
+            Clear
+          </button>
           <div className={styles.toolbarInfo}>
             {messages.filter(m => m.role === 'user').length} queries
           </div>
         </div>
       )}
-      <div className={styles.messages}>
+      <div className={styles.messages} ref={messagesContainerRef}>
         {messages.length === 0 && <EmptyState onExampleClick={handleExampleClick} />}
         {messages.map((msg, index) => (
-          <Message key={index} role={msg.role} text={msg.text} />
+          <Message
+            key={index}
+            role={msg.role}
+            text={msg.text}
+            id={index}
+            bookmarked={bookmarkedMessages.has(index)}
+            onBookmark={handleBookmark}
+            onExtractCitations={handleExtractCitations}
+          />
         ))}
         {isThinking && (
           <div className={styles.thinkingContainer}>
@@ -454,6 +645,133 @@ const Chat = ({
         )}
         <div ref={messagesEndRef} />
       </div>
+
+      {/* Scroll to Bottom Button */}
+      {showScrollButton && (
+        <button
+          className={styles.scrollToBottomButton}
+          onClick={() => {
+            scrollToBottom(true);
+            setIsUserScrolling(false);
+            setShowScrollButton(false);
+          }}
+        >
+          ↓ New messages
+        </button>
+      )}
+
+      {/* Bookmarks Sidebar */}
+      {showBookmarks && (
+        <div className={styles.sidebar}>
+          <div className={styles.sidebarHeader}>
+            <h3>Saved Responses</h3>
+            <button
+              className={styles.closeButton}
+              onClick={() => setShowBookmarks(false)}
+            >
+              ×
+            </button>
+          </div>
+          <div className={styles.sidebarContent}>
+            {bookmarkedMessages.size === 0 ? (
+              <p className={styles.emptyText}>No saved responses yet. Click the ☆ Save button on any response.</p>
+            ) : (
+              [...bookmarkedMessages].map(msgId => {
+                const msg = messages[msgId];
+                if (!msg || msg.role !== 'assistant') return null;
+                return (
+                  <div key={msgId} className={styles.bookmarkItem}>
+                    <div className={styles.bookmarkText}>
+                      {msg.text.substring(0, 200)}...
+                    </div>
+                    <button
+                      className={styles.removeButton}
+                      onClick={() => handleBookmark(msgId)}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Sessions Sidebar */}
+      {showSessions && (
+        <div className={styles.sidebar}>
+          <div className={styles.sidebarHeader}>
+            <h3>Research Sessions</h3>
+            <button
+              className={styles.closeButton}
+              onClick={() => setShowSessions(false)}
+            >
+              ×
+            </button>
+          </div>
+          <div className={styles.sidebarContent}>
+            <div className={styles.saveSession}>
+              <input
+                type="text"
+                placeholder="Session name (optional)"
+                value={sessionName}
+                onChange={(e) => setSessionName(e.target.value)}
+                className={styles.sessionInput}
+              />
+              <button
+                className={styles.saveButton}
+                onClick={handleSaveSession}
+              >
+                Save Current Session
+              </button>
+            </div>
+            <div className={styles.sessionList}>
+              <h4>Saved Sessions</h4>
+              {savedSessions.length === 0 ? (
+                <p className={styles.emptyText}>No saved sessions yet.</p>
+              ) : (
+                savedSessions.map((name, index) => (
+                  <div key={index} className={styles.sessionItem}>
+                    <button
+                      onClick={() => handleLoadSession(name)}
+                      className={styles.sessionName}
+                    >
+                      {name}
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Citations Panel */}
+      {showCitations && extractedCitations && (
+        <div className={styles.citationsPanel}>
+          <div className={styles.citationsHeader}>
+            <h3>Extracted Citations</h3>
+            <button
+              className={styles.closeButton}
+              onClick={() => setShowCitations(false)}
+            >
+              ×
+            </button>
+          </div>
+          <pre className={styles.citationsContent}>{extractedCitations}</pre>
+          <button
+            className={styles.copyCitationsButton}
+            onClick={() => {
+              navigator.clipboard.writeText(extractedCitations);
+              alert('Citations copied!');
+            }}
+          >
+            Copy All Citations
+          </button>
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className={styles.inputForm}>
         <div className={styles.inputWrapper}>
           <input
