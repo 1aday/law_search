@@ -67,7 +67,7 @@ const CodeMessage = ({ text }: { text: string }) => {
     <div className={styles.codeMessage}>
       {text.split("\n").map((line, index) => (
         <div key={index}>
-          <span>{`${index + 1}. `}</span>
+          <span>{`${index + 1}.`}</span>
           {line}
         </div>
       ))}
@@ -86,6 +86,32 @@ const Message = ({ role, text }: MessageProps) => {
     default:
       return null;
   }
+};
+
+const EmptyState = () => {
+  return (
+    <div className={styles.emptyState}>
+      <div className={styles.emptyStateContent}>
+        <h2 className={styles.emptyStateTitle}>
+          Interrogate the Law
+        </h2>
+        <p className={styles.emptyStateSubtitle}>
+          Ask anything about Supreme Court cases. Uncover holdings, dissents, and precedents with precision.
+        </p>
+        <div className={styles.exampleQueries}>
+          <div className={styles.exampleQuery}>
+            What was the key holding in Brown v. Board of Education?
+          </div>
+          <div className={styles.exampleQuery}>
+            Explain the dissenting opinion in Roe v. Wade
+          </div>
+          <div className={styles.exampleQuery}>
+            What precedents did Citizens United overturn?
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 type ChatProps = {
@@ -128,7 +154,7 @@ const Chat = ({
         }
 
         const data = await res.json();
-        console.log('Thread created:', data.threadId); // Debug log
+        console.log('Thread created:', data.threadId);
         setThreadId(data.threadId);
       } catch (error) {
         console.error('Failed to create thread:', error);
@@ -311,34 +337,17 @@ const Chat = ({
 
   }
 
-  const renderTableCell = (content: string, field: string) => {
-    if (field === "Related Legal Areas" && content) {
-      const areas = content.split(",").map(area => area.trim());
-      return (
-        <div className={styles.legalTags}>
-          {areas.map((area, index) => (
-            <span key={index} className={styles.legalTag}>
-              {area}
-            </span>
-          ))}
-        </div>
-      );
-    }
-
-    // Return regular content for other fields
-    return content;
-  };
-
   return (
     <div className={styles.chatContainer}>
       <div className={styles.messages}>
+        {messages.length === 0 && <EmptyState />}
         {messages.map((msg, index) => (
           <Message key={index} role={msg.role} text={msg.text} />
         ))}
         {isThinking && (
           <div className={styles.thinkingContainer}>
             <div className={styles.thinkingBubble}>
-              <span className={styles.thinkingText}>Thinking</span>
+              <span className={styles.thinkingText}>Analyzing precedent</span>
               <span className={styles.dot}>.</span>
               <span className={styles.dot}>.</span>
               <span className={styles.dot}>.</span>
@@ -349,21 +358,21 @@ const Chat = ({
       </div>
       <form
         onSubmit={handleSubmit}
-        className={`${styles.inputForm} ${styles.clearfix}`}
+        className={styles.inputForm}
       >
         <input
           type="text"
           className={styles.input}
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
-          placeholder="Enter your question"
+          placeholder="Ask about any Supreme Court case..."
         />
         <button
           type="submit"
           className={styles.button}
           disabled={inputDisabled}
         >
-          Send
+          Query
         </button>
       </form>
     </div>

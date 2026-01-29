@@ -1,16 +1,29 @@
-import { Inter } from "next/font/google";
+import { Playfair_Display, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import Warnings from "./components/warnings";
 import { assistantId } from "./assistant-config";
 import type { Metadata } from 'next'
-const inter = Inter({ subsets: ["latin"] });
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: '--font-display',
+  weight: ['400', '500', '600', '700', '800', '900'],
+  display: 'swap',
+});
+
+const ibmMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  variable: '--font-mono',
+  weight: ['300', '400', '500', '600'],
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
-  title: 'CaseQuery AI – Instant Supreme Court Insights',
-  description: 'Ask questions about any supreme court case and get key holdings, dissenting opinions, and precedents',
+  title: 'CaseQuery AI – Supreme Court Research Reimagined',
+  description: 'Interrogate precedent. Uncover holdings. Navigate the law with precision.',
   openGraph: {
-    title: 'CaseQuery AI – Instant Supreme Court Insights',
-    description: 'Ask questions about any supreme court case and get key holdings, dissenting opinions, and precedents',
+    title: 'CaseQuery AI – Supreme Court Research Reimagined',
+    description: 'Interrogate precedent. Uncover holdings. Navigate the law with precision.',
     type: 'website',
     locale: 'en_US',
     siteName: 'CaseQuery AI',
@@ -25,8 +38,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'CaseQuery AI – Instant Supreme Court Insights',
-    description: 'Ask questions about any supreme court case and get key holdings, dissenting opinions, and precedents',
+    title: 'CaseQuery AI – Supreme Court Research Reimagined',
+    description: 'Interrogate precedent. Uncover holdings. Navigate the law with precision.',
     images: ['/og-image.png'],
   },
   icons: {
@@ -43,13 +56,13 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
-  themeColor: '#FF5722',
+  themeColor: '#0A0A0A',
 }
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className={`${playfair.variable} ${ibmMono.variable}`}>
+      <body>
         {assistantId ? children : <Warnings />}
       </body>
     </html>

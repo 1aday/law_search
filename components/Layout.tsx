@@ -14,6 +14,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                         <span>Case</span>
                         <strong>Query</strong>
                     </h1>
+                    <div className={styles.tagline}>
+                        Interrogate · Uncover · Navigate
+                    </div>
                 </div>
             </header>
             <main className={styles.main}>{children}</main>
@@ -26,4 +29,4 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     );
 };
 
-export default Layout; 
+export default Layout;
