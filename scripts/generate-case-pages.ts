@@ -6,8 +6,15 @@
  * Usage: npx ts-node scripts/generate-case-pages.ts
  */
 
+interface CaseMatter {
+  slug: string;
+  name: string;
+  area: string;
+  importance: 'critical' | 'high' | 'medium';
+}
+
 // Top 100 Most Important SCC Cases for SEO
-const majorCases = [
+const majorCases: CaseMatter[] = [
   // Charter Fundamental Cases
   { slug: 'r-v-oakes-1986', name: 'R. v. Oakes', area: 'Charter', importance: 'critical' },
   { slug: 'r-v-morgentaler-1988', name: 'R. v. Morgentaler', area: 'Charter', importance: 'critical' },
@@ -44,13 +51,6 @@ const majorCases = [
 
   // Add 80 more important cases...
 ];
-
-interface CaseMatter {
-  slug: string;
-  name: string;
-  area: string;
-  importance: 'critical' | 'high' | 'medium';
-}
 
 async function generateSitemap(cases: CaseMatter[]) {
   const baseUrl = 'https://law-search-tawny.vercel.app';
