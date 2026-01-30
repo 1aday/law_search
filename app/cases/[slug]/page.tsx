@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import Head from 'next/head';
 import Layout from '../../../components/Layout';
 import styles from './case.module.css';
 
@@ -62,19 +61,16 @@ export default function CasePage() {
     );
   }
 
+  // Set page title dynamically
+  useEffect(() => {
+    if (caseData) {
+      document.title = `${caseData.name} | Supreme Court of Canada`;
+    }
+  }, [caseData]);
+
   return (
-    <>
-      <Head>
-        <title>{caseData.name} | Supreme Court of Canada Case Analysis</title>
-        <meta name="description" content={caseData.summary} />
-        <meta name="keywords" content={`${caseData.name}, ${caseData.citation}, Supreme Court of Canada, ${caseData.topics.join(', ')}`} />
-        <meta property="og:title" content={`${caseData.name} - SCC Case Summary`} />
-        <meta property="og:description" content={caseData.summary} />
-        <meta property="og:type" content="article" />
-        <link rel="canonical" href={`https://law-search-tawny.vercel.app/cases/${slug}`} />
-      </Head>
-      <Layout>
-        <div className={styles.casePage}>
+    <Layout>
+      <div className={styles.casePage}>
         <article className={styles.caseArticle}>
           {/* Header */}
           <header className={styles.caseHeader}>
@@ -201,6 +197,5 @@ export default function CasePage() {
         </aside>
       </div>
     </Layout>
-    </>
   );
 }

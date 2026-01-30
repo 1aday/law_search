@@ -10,9 +10,10 @@ const caseCache = new Map<string, any>();
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  context: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const params = await context.params;
     const slug = params.slug;
 
     // Check cache first
